@@ -85,3 +85,14 @@ let rec compress = function
   | a :: (b :: _ as t) -> if a = b then compress t else a :: compress t
   | smaller -> smaller
 ;;
+
+(* Compress tail-recursive *)
+let rec compress' lst =
+  let rec inner acc = function
+    | [] -> []
+    | a :: [] -> acc @ [ a ]
+    | a :: (b :: _ as t) -> if a = b then inner acc t else inner (acc @ [ a ]) t
+  in
+  inner [] lst
+;;
+
