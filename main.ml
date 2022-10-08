@@ -212,3 +212,57 @@ let drop lst n =
   in
   inner [] 1 n lst |> List.rev
 ;;
+
+(* split ["a"; "b"; "c"; "d"; "e"; "f"; "g"; "h"; "i"; "j"] 3;;
+[["a"; "b"; "c"]; ["d"; "e"; "f"; "g"; "h"; "i"; "j"]] *)
+let split lst n =
+  let rec inner acc acc' n = function
+    | [] -> acc
+    | h :: t ->
+      if List.length acc' = n
+      then inner ((h :: t) :: (acc' |> List.rev) :: acc) [] n []
+      else inner acc (h :: acc') n t
+  in
+  inner [] [] n lst |> List.rev
+;;
+
+(* slice ["a"; "b"; "c"; "d"; "e"; "f"; "g"; "h"; "i"; "j"] 2 6;;
+["c"; "d"; "e"; "f"; "g"] *)
+let slice lst s e =
+  let rec inner acc count s e = function
+    | [] -> acc
+    | h :: t ->
+      if count >= s && count <= e
+      then if count = e then h :: acc else inner (h :: acc) (count + 1) s e t
+      else inner acc (count + 1) s e t
+  in
+  inner [] 0 s e lst |> List.rev
+;;
+
+(* rotate ["a"; "b"; "c"; "d"; "e"; "f"; "g"; "h"] 3;;
+["d"; "e"; "f"; "g"; "h"; "a"; "b"; "c"] *)
+let rotate lst n = split lst n |> List.rev |> List.concat
+
+(* remove_at 1 ["a"; "b"; "c"; "d"];;
+["a"; "c"; "d"] *)
+let remove_at n lst =
+  let rec inner acc count n = function
+    | [] -> acc
+    | h :: t ->
+      if count = n then inner acc (count + 1) n t else inner (h :: acc) (count + 1) n t
+  in
+  inner [] 0 n lst |> List.rev
+;;
+
+(* insert_at "alfa" 1 ["a"; "b"; "c"; "d"];;
+["a"; "b"; "alfa"; "c"; "d"] *)
+let insert_at a p lst =
+  let rec inner acc count a p = function
+    | [] -> acc
+    | h :: t ->
+      if count = p
+      then inner (a :: h :: acc) (count + 1) a p t
+      else inner (h :: acc) (count + 1) a p t
+  in
+  inner [] 0 a p lst |> List.rev
+;;
