@@ -255,14 +255,39 @@ let remove_at n lst =
 ;;
 
 (* insert_at "alfa" 1 ["a"; "b"; "c"; "d"];;
-["a"; "b"; "alfa"; "c"; "d"] *)
+["a"; "alfa"; "b"; "c"; "d"] *)
 let insert_at a p lst =
   let rec inner acc count a p = function
     | [] -> acc
     | h :: t ->
       if count = p
-      then inner (a :: h :: acc) (count + 1) a p t
+      then inner (h :: a :: acc) (count + 1) a p t
       else inner (h :: acc) (count + 1) a p t
   in
   inner [] 0 a p lst |> List.rev
 ;;
+
+(* range 4 9;; 
+[4; 5; 6; 7; 8; 9] *)
+let range s e =
+  let rec inner acc s e = if s > e then acc else inner (s :: acc) (s + 1) e in
+  inner [] s e |> List.rev
+;;
+
+let rec range' s e = if s > e then [] else s :: range' (s + 1) e
+
+let rand_select n lst =
+  let rec inner acc =
+    let rand = List.nth lst (Random.int (List.length lst)) in
+    let already_exists = List.exists (fun a -> a = rand) acc in
+    if List.length acc = n
+    then acc
+    else if already_exists
+    then inner acc
+    else inner (rand :: acc)
+  in
+  inner []
+;;
+
+let lotto_select n m = range 1 m |> rand_select n
+let permutation lst = rand_select (List.length lst) lst
