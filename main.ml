@@ -129,9 +129,9 @@ let rec scanl1 f l =
   inner' [] f l |> List.rev
 ;;
 
-(* 
-# pack ["a"; "a"; "a"; "a"; "b"; "c"; "c"; "a"; "a"; "d"; "d"; "e"; "e"; "e"; "e"];;
-[["a"; "a"; "a"; "a"]; ["b"]; ["c"; "c"]; ["a"; "a"]; ["d"; "d"]; ["e"; "e"; "e"; "e"]] *)
+(*
+   # pack ["a"; "a"; "a"; "a"; "b"; "c"; "c"; "a"; "a"; "d"; "d"; "e"; "e"; "e"; "e"];;
+   [["a"; "a"; "a"; "a"]; ["b"]; ["c"; "c"]; ["a"; "a"]; ["d"; "d"]; ["e"; "e"; "e"; "e"]] *)
 let pack lst =
   let rec inner acc acc' = function
     | [] -> acc
@@ -144,8 +144,8 @@ let pack lst =
 ;;
 
 (*
-# encode ["a"; "a"; "a"; "a"; "b"; "c"; "c"; "a"; "a"; "d"; "e"; "e"; "e"; "e"];;
-[("a", 4); ("b", 1); ("c", 2); ("a", 2); ("d", 1); ("e", 4)] *)
+   # encode ["a"; "a"; "a"; "a"; "b"; "c"; "c"; "a"; "a"; "d"; "e"; "e"; "e"; "e"];;
+   [("a", 4); ("b", 1); ("c", 2); ("a", 2); ("d", 1); ("e", 4)] *)
 let encode lst =
   let rec inner acc counter = function
     | [] -> acc
@@ -161,27 +161,27 @@ type 'a rle =
   | One of 'a
   | Many of 'a * int
 
-(* encode_rle ["a"; "a"; "a"; "a"; "b"; "c"; "c"; "a"; "a"; "d"; "e"; "e"; "e"; "e"];; 
-[Many ("a", 4); One "b"; Many ("c", 2); Many ("a", 2); One "d"; Many ("e", 4)] *)
+(* encode_rle ["a"; "a"; "a"; "a"; "b"; "c"; "c"; "a"; "a"; "d"; "e"; "e"; "e"; "e"];;
+   [Many ("a", 4); One "b"; Many ("c", 2); Many ("a", 2); One "d"; Many ("e", 4)] *)
 let encode_rle lst =
   encode lst
   |> List.map (function
-       | a, 1 -> One a
-       | a, x -> Many (a, x))
+    | a, 1 -> One a
+    | a, x -> Many (a, x))
 ;;
 
 (* decode [Many ("a", 4); One "b"; Many ("c", 2); Many ("a", 2); One "d"; Many ("e", 4)];;
-["a"; "a"; "a"; "a"; "a"; "c"; "c"; "a"; "a"; "a"; "e"; "e"; "e"; "e"] *)
+   ["a"; "a"; "a"; "a"; "a"; "c"; "c"; "a"; "a"; "a"; "e"; "e"; "e"; "e"] *)
 let decode lst =
   lst
   |> List.map (function
-       | One a -> [ "a" ]
-       | Many (a, x) -> List.init x (fun _ -> a))
+    | One a -> [ "a" ]
+    | Many (a, x) -> List.init x (fun _ -> a))
   |> List.concat
 ;;
 
 (* duplicate ["a"; "b"; "c"; "c"; "d"];;
-["a"; "a"; "b"; "b"; "c"; "c"; "c"; "c"; "d"; "d"] *)
+   ["a"; "a"; "b"; "b"; "c"; "c"; "c"; "c"; "d"; "d"] *)
 let duplicate lst =
   let rec inner acc = function
     | [] -> acc
@@ -196,13 +196,13 @@ let rec duplicate' = function
 ;;
 
 (* replicate ["a"; "b"; "c"] 3;;
-["a"; "a"; "a"; "b"; "b"; "b"; "c"; "c"; "c"] *)
+   ["a"; "a"; "a"; "b"; "b"; "b"; "c"; "c"; "c"] *)
 let replicate lst repeat =
   lst |> List.map (fun a -> List.init repeat (fun _ -> a)) |> List.concat
 ;;
 
 (* drop ["a"; "b"; "c"; "d"; "e"; "f"; "g"; "h"; "i"; "j"] 3;;
-["a"; "b"; "d"; "e"; "f"; "g"; "h"; "i"; "j"] *)
+   ["a"; "b"; "d"; "e"; "f"; "g"; "h"; "i"; "j"] *)
 let drop lst n =
   let rec inner acc count n = function
     | [] -> acc
@@ -214,7 +214,7 @@ let drop lst n =
 ;;
 
 (* split ["a"; "b"; "c"; "d"; "e"; "f"; "g"; "h"; "i"; "j"] 3;;
-[["a"; "b"; "c"]; ["d"; "e"; "f"; "g"; "h"; "i"; "j"]] *)
+   [["a"; "b"; "c"]; ["d"; "e"; "f"; "g"; "h"; "i"; "j"]] *)
 let split lst n =
   let rec inner acc acc' n = function
     | [] -> acc
@@ -227,7 +227,7 @@ let split lst n =
 ;;
 
 (* slice ["a"; "b"; "c"; "d"; "e"; "f"; "g"; "h"; "i"; "j"] 2 6;;
-["c"; "d"; "e"; "f"; "g"] *)
+   ["c"; "d"; "e"; "f"; "g"] *)
 let slice lst s e =
   let rec inner acc count s e = function
     | [] -> acc
@@ -240,11 +240,11 @@ let slice lst s e =
 ;;
 
 (* rotate ["a"; "b"; "c"; "d"; "e"; "f"; "g"; "h"] 3;;
-["d"; "e"; "f"; "g"; "h"; "a"; "b"; "c"] *)
+   ["d"; "e"; "f"; "g"; "h"; "a"; "b"; "c"] *)
 let rotate lst n = split lst n |> List.rev |> List.concat
 
 (* remove_at 1 ["a"; "b"; "c"; "d"];;
-["a"; "c"; "d"] *)
+   ["a"; "c"; "d"] *)
 let remove_at n lst =
   let rec inner acc count n = function
     | [] -> acc
@@ -255,7 +255,7 @@ let remove_at n lst =
 ;;
 
 (* insert_at "alfa" 1 ["a"; "b"; "c"; "d"];;
-["a"; "alfa"; "b"; "c"; "d"] *)
+   ["a"; "alfa"; "b"; "c"; "d"] *)
 let insert_at a p lst =
   let rec inner acc count a p = function
     | [] -> acc
@@ -267,8 +267,8 @@ let insert_at a p lst =
   inner [] 0 a p lst |> List.rev
 ;;
 
-(* range 4 9;; 
-[4; 5; 6; 7; 8; 9] *)
+(* range 4 9;;
+   [4; 5; 6; 7; 8; 9] *)
 let range s e =
   let rec inner acc s e = if s > e then acc else inner (s :: acc) (s + 1) e in
   inner [] s e |> List.rev
